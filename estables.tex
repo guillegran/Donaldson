@@ -1,0 +1,907 @@
+\documentclass[12pt, a4paper]{amsart}
+
+\usepackage[spanish]{babel}
+
+\usepackage[left=3cm,right=3cm,top=3cm,bottom=3cm]{geometry}
+
+\usepackage{amssymb}
+\usepackage[colorlinks=true,linktocpage=true,linkcolor=blue]{hyperref}
+
+\usepackage{graphicx}
+
+\usepackage{tikz, tikz-cd}
+
+\usepackage[cal=euler, scr=boondox]{mathalfa}
+
+\newcommand\CC{\mathbb{C}}
+\newcommand\PP{\mathbb{P}}
+\newcommand\RR{\mathbb{R}}
+\newcommand\SL{\mathrm{SL}}
+\newcommand\Aa{\mathcal{A}}
+\newcommand\BB{\mathcal{B}}
+\newcommand\GG{\mathcal{G}}
+\newcommand\su{\mathfrak{su}}
+\newcommand\FF{\mathscr{F}}
+\newcommand\EE{\mathscr{E}}
+\newcommand\LL{\mathscr{L}}
+\newcommand\OO{\mathscr{O}}
+\newcommand\Gr{\mathrm{Gr}}
+
+\DeclareMathOperator\id{id}
+\DeclareMathOperator\cte{cte}
+\DeclareMathOperator\tr{tr}
+\DeclareMathOperator\gr{gr}
+\DeclareMathOperator\rk{rk}
+\DeclareMathOperator\im{im}
+\DeclareMathOperator\Aut{Aut}
+\DeclareMathOperator\Vol{Vol}
+\DeclareMathOperator\Hom{Hom}
+\DeclareMathOperator\End{End}
+\DeclareMathOperator\Lie{Lie}
+\DeclareMathOperator\delbar{\bar{\partial}}
+
+\newtheorem{thm}{Teorema}[section]
+\newtheorem{prop}[thm]{Proposición}
+\newtheorem{lema}[thm]{Lema}
+\newtheorem{corol}[thm]{Corolario}
+\theoremstyle{remark} \newtheorem{rmk}[thm]{Observación}
+\theoremstyle{remark} \newtheorem{rmks}[thm]{Observaciones}
+\theoremstyle{definition} \newtheorem{defn}[thm]{Definición}
+\theoremstyle{definition} \newtheorem{ejs}[thm]{Ejemplos}
+\theoremstyle{definition} \newtheorem{ej}[thm]{Ejemplo}
+
+\author{Guillermo Gallego}
+
+\title{Ecuaciones de Yang--Mills en fibrados holomorfos}
+
+\begin{document}
+	\maketitle
+	\begin{abstract}
+		Estas notas fueron elaboradas en la preparación de varias sesiones impartidas por el autor en el seminario de Teoría Gauge del ICMAT. En el texto se estudian las conexiones hermíticas de Yang--Mills en fibrados holomorfos, los fibrados estables, la relación entre ambas nociones, y algunas aplicaciones. En particular, se abordan las principales definiciones y se enuncia el resultado de Donaldson--Uhlenbeck--Yau en variedades Kähler. Posteriormente, se expone la demostración de Donaldson del teorema de Narasimhan--Seshadri y se esboza la demostración del teorema de Donaldson para conexiones ASD en superficies algebraicas. Tras estudiar la teoría de deformación de las conexiones ASD, se aplican los resultados obtenidos al estudio de los invariantes de Donaldson en una superficie algebraica simplemente conexa. Las referencias principales son el libro \cite{DK} y los artículos \cite{DNS,DASD,DID,Margerin}. El autor agradece la colaboración a Guillermo Barajas, Mario García Fernández, Ángel González Prieto, Raúl González Molina, Juan Muñoz Echániz y Roberto Téllez.
+	\end{abstract}
+
+	\tableofcontents
+
+	\section{Ecuaciones de Yang--Mills y fibrados estables}
+	Durante todo el texto consideramos $(X,\omega)$ una variedad Kähler compacta de dimensión compleja $n$.
+
+	\subsection{Conexiones HYM}
+
+	\begin{defn}
+		Sea $E\rightarrow X$ un fibrado vectorial complejo $C^\infty$ y $H$ una métrica hermítica en $E$. Una conexión $H$-unitaria $A$ es una \emph{conexión hermítica de Yang--Mills} (HYM) si satisface las ecuaciones
+		\begin{equation*}
+		\begin{cases}
+			F_A^{0,2}=0, \\
+			\Lambda F_A = \lambda_E \id_E,
+		\end{cases}
+		\end{equation*} 
+		para $\lambda_E$ una constante.
+	\end{defn}	
+	\begin{rmks}
+		\begin{enumerate} 
+			\item El operador $\Lambda:\Omega^{p,q}(X)\rightarrow \Omega^{p-1,q-1}(X)$ es por definición el adjunto del operador $L: \alpha \mapsto \omega \wedge \alpha$. En particular, se cumple que
+				\begin{equation*}
+					(\Lambda F_A)\omega^n = F_A \wedge \omega^{n-1}.
+				\end{equation*} 
+
+			\item Podemos calcular $\lambda_E$ usando la teoría de Chern-Weil,
+				 \begin{align*}
+					 \deg E &= \int_X c_1(E)\wedge \omega^{n-1} = \frac{i}{2\pi} \int_X \tr F_A \wedge \omega^{n-1} \\ &= \frac{i}{2\pi} \int_X \tr \Lambda F_A \omega^n = \frac{i}{2\pi} \rk E \lambda_E n! \Vol X.
+				\end{align*} 
+		De aquí tenemos
+		\begin{equation*}
+			\lambda_E = - \frac{2\pi i}{n! \Vol X}\mu(E),
+		\end{equation*} 
+		donde $\mu(E)=\deg E/\rk E$ denota la \emph{pendiente} de $E$.
+
+	\item Si $n=2$ y $\deg E = 0$, una conexión $H$-unitaria en $E$ es HYM si y sólo si es anti auto-dual (ASD).
+		\end{enumerate}
+	\end{rmks}
+
+	\subsection{Fibrados (semi)estables}
+	Un primer comentario que conviene hacer es que la primera clase de Chern $c_1$ está bien definida para cualquier haz analítico coherente $\FF$ sobre $X$, de modo que para un haz coherente $\FF$ podemos considerar los números $\deg \FF$, $\rk \FF$ y $\mu(\FF)$. En el caso que $\FF$ es algebraico, este hecho se deduce de la existencia de una resolución por haces localmente libres \cite{GRR}. Para el caso analítico general, consultar \cite{Kobayashi}. 
+
+\begin{rmk}
+	Nótese que el grado y la pendiente dependen de la forma Kähler $\omega$. Cuando $\omega$ es una forma de Hodge  (es decir, si $X$ es una variedad proyectiva), el grado es un número entero. En ese caso a veces la dependencia de $\omega$ se identifica con una dependencia de la elección de un fibrado amplio $\OO(1)$ en $X$. GAGA afirma que cuando $X$ es una variedad proyectiva la categoría de haces analíticos es equivalente a la de haces algebraicos. Las definiciones de $\deg$ y $\mu$ coindicen entonces con las definiciones habituales en geometría algebraica.
+\end{rmk}
+
+\begin{defn}
+	Decimos que un haz analítico coherente y libre de torsión $\EE$ es  ($\omega$-)\emph{estable} (respectivamente, \emph{semiestable}) si para todo subhaz coherente $\FF \subset \EE$ con  $0<\rk \FF < \rk \EE$ se tiene que
+	 \begin{equation*}
+		 \mu(\FF)< \mu(\EE)
+	\end{equation*} 
+	(respectivamente, $\leq$).
+\end{defn}
+
+\begin{rmk}
+	El concepto de estabilidad surge originalmente en la teoría geométrica de invariantes (GIT) de Mumford. Esta teoría estudia los cocientes de espacios por grupos en la categoría algebraica. En particular, a la hora de tomar un cociente de una variedad proyectiva, aparecen de forma natural puntos estables y semiestables. Las condiciones de estabilidad para haces se consideran a la hora de construir el espacio de móduli de haces como un cociente de un espacio mayor (un subespacio del \emph{Quot scheme} de Grothendieck).
+
+	Existen varias nociones de estabilidad relacionadas entre sí. Ésta es sólo una de ellas, la $\mu$-estabilidad o ``slope-stability". En el caso algebraico existe también la estabilidad en el sentido de Gieseker, que se define a partir del polinomio de Hilbert de un haz: $p_\FF(n)=\chi(\FF(n))$. 
+\end{rmk}
+		
+\begin{prop}[Jordan-Hölder]
+	Si $\EE$ es un haz semiestable, existe una filtración
+	\begin{equation*}
+	0=\EE_{k+1}\subset \EE_k \subset \EE_{k-1}\subset \cdots \subset \EE_1 \subset \EE_0=\EE,
+	\end{equation*} 
+	con los $\EE_i/\EE_{i+1}$ estables y $\mu(\EE_i/\EE_{i+1})=\mu(\EE)$. Además, el \emph{objeto graduado asociado}
+	\begin{equation*}
+		\gr(\EE) = \bigoplus_i \EE_i/\EE_{i-1}
+	\end{equation*} 
+	está unívocamente determinado por $\EE$ salvo isomorfismo.
+\end{prop}
+
+\begin{proof}
+	Cuando $\EE$ tiene rango $2$ es muy fácil probar lo anterior. Si $\EE$ es estable, la filtración está dada por él mismo. Si $\EE$ es semiestable, pero no estable, existe un subhaz de línea  $\LL\subset \EE$ con  $\mu(\LL)=\mu(\EE)$, de modo que $\mu(\EE/\LL)=\mu(\EE)$ y tenemos la filtración $0\subset \LL \subset \EE$ y el objeto graduado  $\gr(\EE)=\LL \oplus \EE/\LL$. Se puede proseguir por inducción.
+\end{proof}
+
+\begin{defn}
+	Dos haces semiestables $\EE$ y  $\EE'$ se dicen $S$-\emph{equivalentes} si $\gr(\EE)\cong \gr(\EE')$.
+
+	Decimos que un haz $\EE$ es \emph{poliestable} si $\EE$ es estable o si $\EE=\bigoplus_i \EE_i$, con $\mu(\EE_i)=\mu(\EE)$ y los $\EE_i$ estables.
+\end{defn}
+
+Deducimos de la defición anterior que existe una biyección entre las clases de isomorfismo de los haces poliestables y las clases de $S$-equivalencia de los haces semiestables, dada por la asignación de su objeto graduado a cada haz semiestable.
+
+Concluimos este apartado con algunas propiedades de los fibrados estables y semiestables.
+
+\begin{prop}
+	Sean $\FF_1$ y $\FF_2$ haces semiestables y $f:\FF_1\rightarrow \FF_2$ un homomorfismo.
+	\begin{enumerate}
+		\item Si $\mu(\FF_1)>\mu(\FF_2)$, entonces $f=0$.
+		\item Si $\mu(\FF_1)=\mu(\FF_2)$ y $\FF_1$ es estable, entonces $\rk(\FF_1)=\rk(f(\FF_1))$ y $f$ es inyectiva o nula.
+		\item Si $\mu(\FF_1)=\mu(\FF_2)$ y $\FF_2$ es estable, entonces $\rk(\FF_2)=\rk(f(\FF_1))$ y $f$ es genéricamente sobreyectiva o nula.
+	\end{enumerate}
+\end{prop}
+\begin{proof}
+Ejercicio.	
+\end{proof}
+
+\begin{corol}
+	Si $\EE_1$ y $\EE_2$ son fibrados semiestables del mismo rango y grado y uno de ellos es estable, entonces $f$ es un isomorfismo o nula.
+\end{corol}
+\begin{corol}
+	Si $\EE$ es un fibrado estable, entonces $\Aut \EE=\CC\cdot \id_\EE$.	
+\end{corol}
+\begin{proof}
+Sea $f:\EE\rightarrow \EE$ y $a$ autovalor de $f_x:\EE_x\rightarrow \EE_x$ para algún punto $x\in X$. Entonces $f-a\id_\EE$ no es un isomorfismo, luego $f=a\id_\EE$.
+\end{proof}
+\subsection{El teorema de Donaldson--Uhlenbeck--Yau}
+
+\begin{defn}
+	Sea $\EE\rightarrow X$ un fibrado holomorfo. Una métrica hermítica  $H$ en $E$ es una \emph{métrica hermítica de Einstein} (HE) si $A_H$, la conexión de Chern de $(\EE,H)$, es HYM.
+\end{defn}
+
+\begin{thm}[Donaldson--Uhlenbeck--Yau]
+	Un fibrado holomorfo $\EE$ admite una métrica HE si y sólo si es poliestable. Además, esa métrica es única salvo transformación gauge.	
+\end{thm}
+
+\begin{rmk}
+	Este resultado tiene una larga historia. Sus primeros antecedentes están en la teoría de Hodge, que en particular implica el resultado para el caso en que $\EE$ es un fibrado de línea (ver la siguiente proposición). En los años 30 Weil \cite{GrothenWeil} empieza a explorar el problema en rangos superiores, explorando las ``jacobianas generalizadas". En el año 1965 Narasimhan y Seshadri \cite{NS} demostraron el teorema para el caso en que $X$ tiene dimensión compleja $1$, aunque no en estos términos (ver siguiente sección).
+
+	Son Atiyah y Bott en 1983 \cite{AB} (siendo parte del material publicado previamente, en 1980) quienes, estudiando las ecuaciones de Yang--Mills en superficies de Riemann, revisitan el teorema de Narasimhan--Seshadri y lo entienden en términos de teoría gauge. A raíz de estas ideas, Hitchin y Kobayashi conjeturan independientemente el teorema. Posteriormente, las correspondencias de este tipo entre estructuras holomorfas estables y soluciones a ecuaciones gauge han pasado a denominarse en la literatura ``correspondencias de Hitchin--Kobayashi". 
+
+	En 1983 Donaldson \cite{DNS} redemostró el teorema de Narasimhan--Seshadri desde el punto de vista de Atiyah--Bott, sentando las bases de las técnicas que darían el teorema general, y haciendo uso de resultados analíticos de Uhlenbeck \cite{Uhlenbeck}. Posteriormente, en 1985 Donaldson \cite{DASD} prueba el teorema para superficies proyectivas y más tarde para variedades proyectivas de dimensión arbitraria. La demostración del teorema en la generalidad aquí expuesta se debe a Uhlenbeck y Yau \cite{UY}. 
+
+	En los años siguientes estos resultados se han generalizado en diversas direcciones. Caben destacar las generalizaciones a variedades hermíticas, no necesariamente Kähler, los resultados para fibrados principales (que pueden obtenerse del teorema haciendo consideraciones tannakianas, pero que también se han estudiado explícitamente), y la teoría de fibrados de Higgs.
+\end{rmk}
+
+El resultado para fibrados de línea es una consecuencia sencilla de la teoría de Hodge.
+\begin{prop}
+	Todo fibrado de línea holomorfo $\LL \rightarrow X$ admite una métrica HE, única salvo un múltiplo por un escalar.
+\end{prop}
+
+\begin{proof}
+	Tomemos una métrica hermítica arbitraria $H$ en $\LL$. En general, no es cierto que $\Lambda F_H = \lambda_E$. Ahora, si  $H'=e^f H$ para alguna función $f:X\rightarrow \RR$, tenemos
+	\begin{equation*}
+	F_{H'} = F_H + i \bar{\partial} \partial f,
+	\end{equation*} 
+	lo que implica
+	\begin{equation*}
+	\Lambda F_{H'} = \Lambda F_H + \Delta f.
+	\end{equation*} 
+	La teoría de Hodge nos permite obtener una $f$ tal que  $\Lambda F_{H'}$ sea constante. Además, otra $f'$ que cumpliese eso sería de la forma  $f'=f+g$, con  $\Delta g=0$, de modo que  $g$ es una constante.
+\end{proof}
+
+Podemos reformular el teorema desde otra perspectiva, en la que en vez de variar la métrica, variamos la conexión.
+
+Fijamos $E\rightarrow X$ un fibrado vectorial  $C^\infty$  (esto equivale a fijar el tipo topológico de $E$) y fijamos $H$ una métrica hermítica en $E$. Denotamos por $\Aa$ el espacio de las conexiones $H$-unitarias, y por $\Aa^{1,1}$ el subespacio correspondiente a las conexiones con curvatura de tipo $(1,1)$. Dada una conexión $A\in \Aa^{1,1}$ denotamos por $\delbar_A$ el correspondiente operador de Dolbeaut y $\EE_A$ la estructura holomorfa asociada.
+
+El teorema de Donaldson--Uhlenbeck--Yau puede reformularse ahora de la siguiente manera.
+
+\begin{thm}
+	Sea $A_0 \in \Aa^{1,1}$. Si $\EE_{A_0}$ es estable, existe una $A\in \Aa$ (única salvo una transformación gauge) tal que $A$ es HYM y $\EE_{A_0}\cong \EE_A$.
+\end{thm}
+
+Más aún, la acción del grupo gauge $\GG=\Omega^0(X,U_H(E))$ extiende a una acción del \emph{grupo gauge complejo} $\GG^{\CC}=\Omega^0(X,\Aut(E))$. Dada $g\in \GG^\CC$, definimos  $\tilde{g}=(g^\dagger)^{-1}$ y
+\begin{align*}
+	\delbar_{g(A)}&= g \delbar_A g^{-1} \\
+	\partial_{g(A)}&= \tilde{g} \delbar_A \tilde{g}^{-1}.
+\end{align*} 
+Los elementos de $\GG$ pueden verse como aquellos elementos $u\in \GG^\CC$ con $u=\tilde{u}$. En particular, si $u\in \GG$, la acción anterior simplemente es la acción habitual $d_{u(A)}=ud_A u^{-1}$.
+
+Nótese además que $\EE_{A_1}$ es isomorfo a $\EE_{A_2}$ si y sólo si $A_2=g(A_1)$, para $g\in \GG^\CC$. Como $\Aa^{1,1}$ es $\GG^\CC$ invariante, esto quiere decir que $\Aa^{1,1}/\GG^\CC$ parametriza las clases de isomorfía de fibrados holomorfos de tipo topológico $E$.
+
+Más aún, puede demostrarse que la acción de $\GG^\CC$ en  $\Aa^{1,1}$ admite la aplicación momento $\mu(A)=\Lambda F_A$, de modo que el espacio de móduli de conexiones HYM puede obtenerse como una reducción simpléctica (de hecho, es una reducción Kähler) $\mu^{-1}(\lambda_E)/\GG$.
+
+\begin{figure}[hb]
+	\centering
+\includegraphics[width=.8\textwidth]{dibujomoduli.jpg}	
+\caption{Órbitas de $\GG^\CC$ en  $\Aa^{1,1}$.}
+\end{figure}
+
+\section{El teorema de Narasimhan--Seshadri}
+En esta sección supondremos que $\dim_\CC X = 1$. Igual que antes,  $E\rightarrow X$ denota un fibrado vectorial complejo $C^\infty$ y $H$ una métrica hermítica en $E$. Como $X$ es una superficie, el tipo topológico de $E$ está determinado por su grado $d$ y su rango $r$. 
+
+En este caso todas las conexiones en $E$ tienen trivialmente la curvatura de tipo $(1,1)$, luego $\Aa=\Aa^{1,1}$. Además, $\Lambda F_A \omega = F_A$, de modo que $A$ es HYM si y sólo si $F_A=\lambda_E \id_E \omega$. Se dice entonces que  $A$ es de \emph{curvatura central constante}. En particular, si $d=0$,  $A$ es HYM si y sólo si es plana. La correspondencia de Riemann--Hilbert implica entonces que, si $d=0$, el espacio de móduli de las conexiones HYM en $E$ puede identificarse con la variedad de caracteres $\Hom(\pi_1(X),U(r))/U(r)$. De hecho, esa identificación es un isomorfismo analítico complejo.
+
+El teorema de Donaldson--Uhlenbeck--Yau implica en esta situación el siguiente.
+
+\begin{thm}[Narasimhan--Seshadri]
+	El espacio de móduli $\mathcal{M}(r,0)$ de los fibrados holomorfos estables de rango $r$ y grado $0$ está en biyección canónica con la variedad de caracteres $\Hom(\pi_1(X),U(r))/U(r)$.
+\end{thm}
+
+De hecho, Narasimhan y Seshadri prueban que dicha biyección es un homeomorfismo. Más aún, puede demostrarse que la biyección es un isomorfismo analítico real.
+
+Otra cosa importante a tener en cuenta es que un haz coherente $\FF$ sobre una curva compleja puede escribirse siempre como $\FF=\EE \oplus \mathscr{T}$, donde $\EE$ es localmente libre y $\mathscr{T}$ es un haz de torsión. Por tanto, para estudiar la estabilidad de fibrados holomorfos en superficies de Riemann sólo es necesario considerar subfibrados. Esto hace que el recíproco de DUY sea bastante fácil de demostrar en superficies de Riemann.
+
+\begin{prop}
+	Si $(\EE,H)$ es un fibrado HE sobre una superficie de Riemann, entonces $\EE$ es poliestable. 
+\end{prop}
+\begin{proof}
+	Supongamos que $\EE'\subset \EE$ es un subfibrado holomorfo de $\EE$. Tenemos una sucesión exacta de fibrados $0\rightarrow \EE'\rightarrow \EE \rightarrow \EE'' \rightarrow 0$ y podemos escribir
+	\begin{equation*}
+	d_{H}=
+	\begin{pmatrix}
+		d_{A'} & \beta \\
+		-\beta^\dagger & d_{A''}
+	\end{pmatrix}.
+	\end{equation*} 
+	Aquí, $A'$ y $A''$ son las restricciones de $A$ a $\EE'$ y $\EE''$, respectivamente, mientras que $\beta \in \Omega^{0,1}(X,\Hom(\EE'',\EE'))$ es un representante de la clase de $\EE$ como extensión de $\EE''$ por $\EE'$. En particular, si $\beta=0$, entonces $\EE\cong \EE'\oplus \EE''$.
+
+	Ahora, el elemento ``superior izquierdo"  de $F_H$ es  $F_{A'}-\beta\wedge \beta^\dagger$. Tomando trazas, multiplicando por $\tfrac{i}{2\pi}$ e integrando, obtenemos
+	\begin{equation*}
+		\frac{i}{2\pi} \rk \EE' \lambda_\EE \Vol X = \frac{i}{2\pi} \int_X \tr F_{A'} + \lVert \beta \rVert^2.
+	\end{equation*} 
+	Por la teoría de Chern--Weil, obtenemos
+	\begin{equation*}
+		\mu(\EE) = \mu(\EE') + C\lVert \beta \rVert^2,
+	\end{equation*} 
+	para $C>0$ una constante. Por tanto, $\mu(\EE)\geq \mu(\EE')$, con igualdad si y sólo si $\beta=0$.
+\end{proof}
+
+Demostremos ahora el teorema de Narasimhan--Seshadri en el caso particular de rango $2$. Comenzamos con $E$ un fibrado $C^\infty$ de rango $2$ y grado $0$ y consideramos $H$ una métrica hermítica en $E$ y $\Aa$ el espacio de las conexiones $H$-unitarias. Dada una conexión $A\in \Aa$ denotamos por $\EE_A$ la estructura holomorfa en $E$ inducida por $\delbar_A$.
+
+Fijamos $\EE$ una estructura holomorfa en $E$ y llamamos $A_0$ a la conexión de Chern asociada por la métrica $H$ y $\Gamma=\GG^\CC\cdot A_0$ la correspondiente $\GG^\CC$-órbita.
+
+Se trata de encontrar una conexión plana en $\Gamma$. Para ello, consideramos el \emph{lagrangiano de Yang--Mills}
+\begin{equation*}
+	J(A)=\lVert F_A \rVert_{L^2} = \left( \int_X |F_A|^2 \right)^{1/2}.
+\end{equation*} 
+
+\begin{prop}\label{infimo}
+Si $\EE$ es estable, el ínfimo de $J$ en $\Gamma$ se alcanza en $\Gamma$.	
+\end{prop}
+
+Esto es suficiente para demostrar el teorema de Narasimhan--Seshadri.
+
+\begin{proof}[Demostración del teorema de Narasimhan--Seshadri]
+	Basta probar que si $A$ es una conexión con $F_A\neq 0$, existe otra conexión en la misma $\GG^\CC$-órbita con menor valor de $J$.
+	Tomemos $\xi \in \Lie \GG^\CC=\Omega^0(X,\End E)$ \emph{autoadjunto}, es decir, $\xi=\xi^\dagger$. Podemos considerar la transformación gauge  $g_t=e^{t\xi}$, para $t\geq 0$, que verifica
+	\begin{equation*}
+		F_{g_t\cdot A}=F_A - t(\partial_A\delbar_A - \delbar_A \partial_A)\xi + o(t^2).
+	\end{equation*} 
+	Ahora, $\partial_A\delbar_A - \delbar_A \partial_A=\star d_A^\dagger d_A$, y, por la teoría de Hodge, podemos tomar  $\xi$ tal que $\star d_A^\dagger d_A \xi = F_A$. Para dicho $\xi$ tenemos
+	\begin{equation*}
+		F_{g_t \cdot A} = F_A(1-t) + o(t^2).
+	\end{equation*} 
+	Tomando $t$ pequeño, encontramos conexiones $g_t \cdot A$ con $J(g_t \cdot A)\leq J(A)$, a menos que $F_A=0$. En conclusión, si el mínimo de $J$ se alcanza en un elemento $A \in \Gamma$, esta $A$ es una conexión plana.
+
+	Finalmente, veamos la unicidad. En primer lugar, nótese que toda $\tilde{g} \in \GG^\CC$ puede descomponerse como $gu$, con  $g=g^\dagger$ y  $u\in \GG$. Basta considerar entonces dos soluciones distintas  $A$ y $B$ tales que $B=g(A)$, con $g=g^\dagger$. Como $F_A =F_B=0$, tenemos que $$\partial_A\delbar_A g^2 = - [(\delbar_A g^2)g^{-1}][(\delbar_A g^2)g^{-1}]^\dagger.$$ 
+	Por tanto, $\delbar(\tr g^2)\leq 0$, con igualdad si y sólo si $\delbar_A g^2=0$. Por el principio del máximo, la única posibilidad es $\tr g^2=0$, de modo que $g$ es constante y $A=B$.
+\end{proof}
+
+\begin{proof}[Demostración de la Proposición \ref{infimo}]
+Supongamos que $(A_n)\subset \Gamma$ es una sucesión minimizante para $J|_{\Gamma}$. Hacemos uso del siguiente teorema.
+
+\begin{thm}[Uhlenbeck]
+	Si $(A_n)\subset \Aa$ es una sucesión tal que $(\lVert F_{A_n}\rVert_{L^2})$ es acotada, existe una subsucesión $(A_{n'})\subset(A_n)$ y una sucesión de transformaciones gauge $L^2_2$, $(u_{n'})\subset \GG_2$ tal que la sucesión $(u_{n'}\cdot A_{n'})$ es convergente a una conexión $A$ débilmente en $L^2_1$.
+\end{thm}
+
+Este resultado implica que existe una conexión $A_\infty \in \Aa_1$ a la que nuestra sucesión minimizante converge débilmente. Ahora, un resultado de Atiyah y Bott (hemos visto algo parecido nosotros?) implica que existe una transformación gauge $g\in \GG_2^\CC$ tal que $g\cdot A_\infty$ es $C^\infty$. Por tanto, la $\GG^\CC$-órbita de $A_\infty$, que denotamos por $\Gamma'$, va asociada también a una estructura holomorfa en $E$, que denotamos por $\EE'$.
+
+\begin{lema}
+Existe un homomorfismo no nulo $f:\EE\rightarrow \EE'$.	
+\end{lema}
+\begin{proof}
+	Usando $A_0$ y $A_n$ podemos inducir una conexión $A_0*A_n$ en $\End E=E^*\otimes E$ y considerar los operadores $\delbar_{n}=\delbar_{A_0*A_n}$ y $\delbar_\infty=\delbar_{A_0*A_\infty}$, induciendo diferentes estructuras holomorfas en $\End E$. Nótese además que existe una sucesión de $(0,1)$-formas  $(\beta_n)$ de modo que $\delbar_\infty=\delbar_n + \beta_n$ y que $\beta_n \rightarrow 0$ débilmente en  $L^2_1$ cuando $n\rightarrow \infty$.	
+
+	De la elipticidad de $\delbar_\infty$ tenemos que
+	 \begin{equation*}
+		 \lVert f \rVert_{L^2_1} \leq C(\lVert \delbar_\infty f\rVert_{L^2}+\lVert f \rVert_{L^2})
+	\end{equation*} 
+	para toda $f\in \Omega^0(X,\End E)$. Como, para cada $n$, tenemos $A_n \in \Gamma$, existe un homomorfismo de fibrados holomorfos $f_n:\EE \rightarrow \EE_{A_n}$. Equivalentemente, $f_n$ es una sección  $f_n \in \Omega^0(X,\End E)$ con $\delbar_n f_n=0$. Además, podemos tomar los $f_n$ normalizados de forma que $\lVert f_n \rVert_{L^2}=1$. Ahora,
+	 \begin{equation*}
+		 \lVert f_n \rVert_{L^2_1} \leq C(\lVert [\beta_n,f_n]\rVert_{L^2}+1) \leq C_1 \lVert \beta_n \rVert_{L^4}\lVert f_n \rVert_{L^4} + C_2.
+	\end{equation*} 
+	De aquí, como la inclusión de $L^{2}_1$ en $L^4$ es compacta, tenemos que $\lVert \beta_n \rVert_{L^4} \rightarrow 0$, de modo que  $(f_n)$ está acotada en $L^2_1$ y por tanto tiene una subsucesión débilmente convergente $(f_{n'})$. Como las $f_n$ tienen norma  $L^2$ igual a  $1$ y la inclusión  $L^2_1\subset L^2$ es compacta, el límite débil $f$ es no nulo. Como $\delbar_n f_n=0$, en el límite tenemos $\delbar_\infty f=0$, lo que implica que $f$ es una sección holomorfa no nula del fibrado holomorfo inducido por $A_0*A_\infty$ en $\End E$. En otras palabras $f$ es un elemento no nulo de $\Hom(\EE,\EE')$.
+\end{proof}
+
+Vamos a probar ahora que, si $\EE$ es estable, $f$ debe ser un isomorfismo, de modo que $\Gamma=\Gamma'$ y el ínfimo de $J$ en $\Gamma$ se alcanza en $\Gamma$. En efecto, supongamos que $f$ no es un isomorfismo. Es posible entonces hallar $K$, $G$, $F$ y $H$ fibrados de línea tales que tenemos el siguiente diagrama \cite[p. 547]{NS} 
+\begin{center}
+\begin{tikzcd}
+	0 \rar & K \rar  & \EE \rar \dar{f}& G\dar{g} \rar \dar& 0 \\
+	0 & H \lar & \EE' \lar & F \lar & 0, \lar
+\end{tikzcd}
+\end{center}
+con $g$ una aplicación no nula.
+
+De este diagrama se deducen varias cosas. En primer lugar, como existe una aplicación holomorfa no nula $g:G\rightarrow F$, se tiene que  $\deg G \leq \deg F$. Ahora, \emph{si $\EE$ es estable}, entonces $\deg K < 0$. Por tanto,  $\deg G > 0$ y, en consecuencia, también  $\deg F >0$.
+
+Si tomamos una conexión $A\in \Gamma'$ podemos considerar las conexiones $A'$ y $A''$ inducidas en $F$ y en $H$, respectivamente y tenemos
+\begin{equation*}
+	\int_X |F_A|^2 \geq \int_X |F_{A'}|^2 + |F_{A''}|^2,
+\end{equation*} 
+de modo que 
+\begin{equation*}
+	J(A)\geq |\deg F| + |\deg H| = 2\deg F.
+\end{equation*} 
+Por tanto
+\begin{equation*}
+\inf J|_{\Gamma'} \geq 2\deg F.
+\end{equation*} 
+
+Por otra parte, si tomamos una conexión $B\in \Gamma$, podemos tomar $B'$ y $B''$ las correspondientes conexiones planas en $K$ y $G$ que da el teorema de Hodge asociadas a las métricas $H|_K$ y $H|_G$. Tomamos también $\beta \in \Omega^{0,1}(X,\Hom(G,K))$ el representante de la clase de la extensión $0\rightarrow K \rightarrow \EE \rightarrow G \rightarrow 0$ que cumple $d_{B'*B''}\beta =0$, que sabemos que existe por la teoría de Hodge. Definimos una familia de conexiones $B(t)$ como
+\begin{equation*}
+	d_{B(t)}=
+	\begin{pmatrix}
+		d_{B'} & t\beta \\
+		-t\beta^\dagger & d_{B''}
+	\end{pmatrix}.
+\end{equation*} 
+La curvatura de estas conexiones viene dada por
+\begin{equation*}
+	F(t)=
+	\begin{pmatrix}
+		F_{B'}- t^2 \beta \wedge \beta^\dagger & 0 \\
+0		 & F_{B''} - t^2\beta^\dagger \wedge \beta
+	\end{pmatrix}.
+\end{equation*} 
+Ahora, $J(B(t))$ converge a $|\deg G|+|\deg K|=2\deg G$ cuando $t\rightarrow 0$. De hecho, tenemos
+\begin{equation*}
+	J(B(t))^2 = \left(2|\deg G| - 2t^2\int_X|\beta|^2\right)^2,
+\end{equation*} 
+de modo que, tomando $t$ pequeño tal que $t^4\int_X |\beta|^4 << t^2\int_X |\beta|^2$ (nótese que podemos normalizar $\beta$), tenemos $J(B(t))<2\deg G$. Por tanto, $$\inf J|_{\Gamma}<2\deg G.$$
+
+Concluimos entonces que
+\begin{equation*}
+	2\deg F \leq \inf J|_{\Gamma'} \leq \inf J|_\Gamma < 2 \deg G,
+\end{equation*} 
+pero esto contradice el hecho de que $\deg F\geq \deg G$.
+\end{proof}
+
+
+\section{El teorema de Donaldson}
+\subsection{Introducción}
+Consideremos ahora el caso en el que estamos principalmente interesados: conexiones ASD en superficies algebraicas. Consideramos entonces que $X$ es una superficie algebraica completa y lisa. Un resultado clásico de geometría algebraica (debido a Zariski) afirma que $X$ es, de hecho, una variedad proyectiva. Podemos tomar entonces $\OO(1)$ el fibrado de línea relativamente amplio sobre $X$, relativo a una inmersión de $X$ en un espacio proyectivo.
+
+Además, la clase de fibrados que nos interesa considerar son los $\SL(2,\CC)$-fibrados. Un \emph{$\SL(2,\CC)$-fibrado holomorfo} es un fibrado vectorial holomorfo $\EE\rightarrow X$ de rango $2$ y con $\det \EE=\OO_X$. Fijar una métrica $H$ en $\EE$ equivale a reducir el grupo de estructura a $\mathrm{SU}(2)$.
+
+\begin{rmk}
+	Nótese que un $\SL(2,\CC)$-fibrado holomorfo $\EE$ es estable si y sólo si para todo fibrado de línea holomorfo $\LL\rightarrow X$ tal que existe una función $f:\EE\rightarrow \LL$ se tiene que $\deg \LL >0$. En efecto, si es estable tenemos esto ya que $\ker f$ ha de ser un haz de grado negativo. Por otra parte, dado cualquier subhaz $i:\FF\rightarrow \EE$ podemos tomar $\LL$ el fibrado más pequeño que contiene al conúcleo de $i$.
+
+	Por otra parte, $\EE$ es poliestable si y sólo si es estable o puede escribirse como una suma  $\EE=\LL \oplus \LL^{-1}$, con $\deg \LL=0$.
+\end{rmk}
+
+En esta sección, vamos a esbozar la prueba del \emph{teorema de Donaldson}.
+
+\begin{thm}[Donaldson] \label{Donaldson}
+Sea $X$ una superficie algebraica completa y lisa. Todo $\SL(2,\CC)$-fibrado holomorfo poliestable $\EE$ en $X$ admite una métrica HE.	
+\end{thm}
+
+\subsection{El teorema de anulación y sus consecuencias} 
+Empezamos por obtener una fórmula de Weitzenbock, que nos permitirá probar el recíproco del teorema de Donaldson (Kobayashi--Lübke, en general) y la unicidad de la solución. 
+
+Fijamos $E\rightarrow X$ un fibrado vectorial complejo de rango $2$ y $H$ una métrica hermítica en $E$. Igual que antes, denotamos $\Aa$ el espacio de las conexiones $H$-unitarias en $E$ y, si $A\in \Aa^{1,1}$, denotamos por $\EE_A$ el fibrado holomorfo $(E,\delbar_A)$.
+
+\begin{lema}[Fórmula de Weitzenbock]
+	Para toda conexión $A$ en $E$, se tienen las siguientes igualdades
+	 \begin{align*}
+		 \delbar_A^\dagger \delbar_A &= \tfrac{1}{2} d_A^\dagger d_A - i \Lambda F_A \\
+		 \partial_A^\dagger \partial_A &= \tfrac{1}{2} d_A^\dagger d_A + i \Lambda F_A
+	\end{align*}
+\end{lema}
+\begin{proof}
+Todo se basa en las siguientes ``identidades de Kähler" 	
+\begin{align*}
+	\delbar_A^\dagger &= -i \Lambda \partial_A \\
+	\partial_A^\dagger &= i \Lambda \delbar_A.
+\end{align*}
+De aquí,
+\begin{equation*}
+	d_A^\dagger d_A = i \Lambda(\partial_A - \delbar_A)(\partial_A + \delbar_A) = i\Lambda(\partial_A \delbar_A - \delbar_A \partial A).
+\end{equation*} 
+Ahora,
+\begin{equation*}
+F_A^{1,1}= \partial_A \delbar_A + \delbar_A \partial_A,
+\end{equation*} 
+de modo que
+\begin{equation*}
+d_A^\dagger d_A = 2\delbar_A^\dagger \delbar_A + 2i\Lambda F_A = 2\partial_A^\dagger \partial_A - 2i\Lambda F_A,
+\end{equation*} 
+como queríamos probar.
+\end{proof}
+
+\begin{corol}[Teorema de anulación]
+	Sea $A\in \Aa^{1,1}$ y $\EE_A$ la estructura holomorfa inducida por $A$ en $E$.
+	\begin{itemize}
+		\item Si $i\Lambda F_A$ es semidefinido negativo, entonces toda sección  $s\in H^0(X,\EE_A)$ cumple $d_A s=0$. En otras palabras,  $\delbar_A s=0$ implica $d_A s =0$.
+		\item Más aún, si  $i\Lambda F_A$ es definido negativo, entonces $H^0(X,\EE_A)=0$.
+	\end{itemize}
+	
+\end{corol}
+\begin{proof}
+	Tenemos
+	\begin{equation*}
+		\lVert \delbar_A s\rVert^2 = \langle \delbar_A^\dagger \delbar_A s, s\rangle = \langle \tfrac{1}{2} d_A^\dagger d_A s, s \rangle - \langle i \Lambda F_A s, s \rangle \geq \tfrac{1}{2}\lVert d_A s\rVert^2.
+	\end{equation*} 
+	Por tanto, si $\delbar_A s=0$, entonces  $d_A s=0$. Además, $s\neq 0$ e  $i\Lambda F_A <0$ da una contradicción.
+\end{proof}
+
+Ahora, las consecuencias del teorema de anulación.
+\begin{prop}[Unicidad]
+	Una $\GG^\CC$-órbita en $\Aa^{1,1}$ tiene a lo sumo una $\GG$-órbita de conexiones ASD.
+\end{prop}
+\begin{proof}
+	Dadas dos conexiones $A_1$ y $A_2$ relacionadas por un elemento $g\in \GG^\CC$, podemos considerar la conexión $A_1*A_2$ en $\End E=E^* \otimes E$, que induce una estructura holomorfa $\FF$ en $\End E$. Ahora, $A_2=g(A_1)$ para $g\in \GG^\CC$ equivale a decir que $g$ es una sección holomorfa de $\FF$. Si $A_1$ y $A_2$ son ASD entonces $A_1*A_2$ también lo es, y por tanto $d_{A_1*A_2}g=0$. Ahora, podemos considerar $h=g^\dagger g$, que es una sección holomorfa de $\End E$ equipado con la estructura inducida por la conexión $A_1*A_1$, de modo que $d_{A_1}h=0$. Finalmente, si definimos $u=gh^{-1/2}$, tenemos que $d_{A_1*A_2}u=0$ y $u\in \GG$. Por tanto, $A_2=u(A_1)$. 
+\end{proof}
+
+\begin{prop}[Kobayashi--Lübke]
+	Si $A$ es una conexión ASD, entonces $\EE_A$ es poliestable.
+\end{prop}
+\begin{proof}
+	Basta ver que si $\LL$ es un fibrado de línea con  $\deg \LL \leq 0$ entonces, o bien $\Hom(\EE_A,\LL)=0$, o bien $\EE_A=\LL \oplus \LL^{-1}$. Tomamos $h$ la métrica HE en  $\LL$ que obtuvimos aplicando el teorema de Hodge y consideramos la conexión $B=A*A_h$ en $\Hom(\EE_A,\LL)$. Tenemos
+	\begin{equation*}
+	i\Lambda F_B = \frac{2\pi}{\Vol X}\deg \LL \leq 0.
+	\end{equation*} 
+	Si $\Hom(\EE_A,\LL)=0$, entonces $\EE_A$ es estable y hemos terminado. Supongamos entonces que existe $s\in \Hom(\EE_A,\LL)$, $s\neq 0$. En particular, esto implica que, como  $i\Lambda F_B \geq 0$ tenemos $d_B s=0$. Si $s\neq 0$ entonces necesariamente $\deg \LL=0$ y el homomorfismo  $s:\EE_A \rightarrow \LL$ define una escisión  $\EE_A=\LL \oplus \LL^{-1}$.
+\end{proof}
+
+\begin{rmk}
+	Veamos por qué, en efecto, $s$ define una escisión de $\EE_A$.
+	La aplicación $s:\EE_A \rightarrow \LL$ induce una sucesión exacta $0\rightarrow \LL' \overset{i}{\rightarrow} \EE_A \overset{s}{\rightarrow} \LL$. Queremos probar ahora que, fija una métrica $H$ en $\EE_A$, el fibrado $\LL'^\perp$ dado por el haz de secciones perpendiculares a las secciones holomorfas de $\LL'$ es un subfibrado holomorfo de $\EE_A$. Para eso basta ver que si $t \in \Omega_X^0(E)$ es tal que $\langle t,r \rangle_H=0$ para todo $r\in H^0(X,\LL')$, entonces $\langle \delbar_A t, r \rangle_H = 0$. Ahora,
+	\begin{equation*}
+		\langle \delbar_A t, r\rangle = \langle t, \partial_{A} r \rangle + \delbar \langle t, r\rangle = 0.
+	\end{equation*} 
+	Aquí, el segundo término es cero por hipótesis, mientras que el primero lo es porque $\partial_A r \in H^0(X,\LL')$. En efecto, si $r\in H^0(X,\LL')$, tenemos $s(r)=0$, luego
+	\begin{equation*}
+		0= \partial_{A_h}(s(r))=\partial_B(s)(r) + s(\partial_{A}(r)) = s(\partial_{A}(r)),
+	\end{equation*} 
+	ya que hemos asumido que $\partial_B s =0$.
+
+	%La métrica $H$ en $E$ permite definir una proyección ortogonal $\pi:E \rightarrow E$ de modo que tenemos la sucesión exacta  $0\rightarrow \LL^{-1} \overset{i}{\rightarrow} E \overset{\pi}{\rightarrow} E\overset{s}{\rightarrow} \LL \rightarrow 0$ y una escisión $E=\LL \oplus \LL^{-1}$ en la categoría diferenciable. Para poder hacer la escisión holomorfa, basta ver que $\delbar_A \pi = 0$. Fijando una métrica $h$ en $\LL$, esto equivale a mostrar que  $\delbar_{A_h^* * A}i=0$ o, dualmente, que $\partial_{A*A_h}s=0$.
+\end{rmk}
+
+\subsection{El flujo de Yang--Mills} Las conexiones ASD se encuentran en los puntos críticos del funcional de Yang--Mills $J(A)=\lVert F_A \rVert^2$. Podemos buscar estos puntos como soluciones al flujo del gradiente de dicho funcional
+\begin{equation*}
+	\frac{\partial A}{\partial t} = -d_A^\dagger F_A= -i (\delbar_A - \partial_A)\Lambda F_A.
+\end{equation*} 
+En cada $\GG^\CC$-órbita, podemos fijar una conexión $A$ y plantear la ecuación para una familia uniparamétrica  $g(t)\in \GG^\CC$, $t\geq 0$, de modo que buscamos una solución de
+ \begin{equation*}
+\begin{cases}
+	\frac{\partial g}{\partial t} g^{-1}=-i\Lambda F_{g(A)}, \\
+	g(0)=1.
+\end{cases}
+\end{equation*} 
+Definiendo $h=g^\dagger g$, obtenemos la ecuación
+ \begin{equation*}
+	 \frac{\partial h}{\partial t}=-2ih \Lambda F_{h(A)}.
+\end{equation*} 
+Equivalentemente, podemos fijar un fibrado holomorfo $\EE$ y escribir las ecuaciones en términos de una familia de métricas $H(t)$. Obtenemos así la ecuación de \emph{flujo de Yang--Mills}
+\begin{equation*}
+	\frac{\partial H}{\partial t} = -2iH \Lambda F_{H},
+\end{equation*} 
+donde $F_H$ es la curvatura de $A_H$ la conexión de Chern de $H$ en $\EE$.
+
+La teoría de ecuaciones parabólicas permite obtener el siguiente resultado.
+
+\begin{prop}
+	Dada cualquier métrica $K$ en $\EE$, existe $H(t)$ una solución $C^\infty$ al flujo de Yang--Mills, definida para $t\in [0,\infty)$ y tal que $H(0)=K$.
+\end{prop}
+
+\subsection{El lagrangiano de Donaldson} Supongamos que $\EE$ es un fibrado holomorfo de rango $r$ en una variedad compleja $Z$ y que $\varphi$ es una función $p$-lineal invariante en $\mathfrak{gl}(r,\CC)$ totalmente simétrica. Entonces, dada cualquier métrica $H$ en $\EE$ obtenemos una clase característica $\varphi(F_H):=\varphi(F_H,F_H,\dots,F_H) \in \Omega^{p,p}(Z)$.
+Ahora, dadas dos métricas $H$ y $K$ podemos construir un invariante $R(H,K)\in \Omega^{p-1,p-1}(Z)/(\im \partial + \im \delbar)$ con las siguientes propiedades
+\begin{enumerate}
+	\item $R(K,K)=0$ y, dada otra métrica $J$,
+		\begin{equation*}
+			R(H,K)=R(H,J)+R(J,K);
+		\end{equation*} 
+	\item si $H(t)$ es una familia uniparamétrica lisa de métricas, entonces
+		 \begin{equation*}
+			 \frac{d}{dt} R(H_t,K)=-ip\varphi(H^{-1}\dot{H},F_H,\dots,F_H).
+		\end{equation*} 
+	\item 
+		\begin{equation*}
+			i\delbar \partial R(H,K)=\varphi(F_H)-\varphi(F_K).
+		\end{equation*} 
+\end{enumerate}
+La forma de construir $R$ es integrar la fórmula de la propiedad 2.
+
+Cuando $\varphi$ es la traza, obtenemos el invariante
+ \begin{equation*}
+	 R_1(H,K)=\log \det (K^{-1}H).
+\end{equation*} 
+Cuando $\varphi$ es la forma de Killing $-\tr(AB)$, $R_2(H,K)$ cumple
+\begin{equation*}
+	i\delbar \partial R_2(H,K) = (-\tr(F_H^2))-(-\tr(F_K^2)).
+\end{equation*} 
+
+Supongamos ahora que tenemos una sucesión exacta de fibrados holomorfos $0\rightarrow \EE'\rightarrow \EE \rightarrow \EE'' \rightarrow 0$. Una métrica $H$ en $\EE$ induce métricas $H'$ y $H''$ en $\EE'$ y $\EE''$ y una forma de extensión  $\beta_H \in \Omega^{0,1}(Z,\Hom(\EE'',\EE'))$. Se puede probar que para cada par de métricas $H$ y $K$ en $\EE$ se tiene
+\begin{enumerate}
+	\item $R_1(H,K)=R_1(H',K')+R_1(H'',K'')$,
+\item $R_2(H,K)=R_2(H',K')+R_2(H'',K'')-2i[\tr(\beta_H\wedge \beta_H^\dagger)-\tr(\beta_K \wedge \beta_K^\dagger)]$.
+\end{enumerate}
+
+Finalmente, si $\EE$ es un $\SL(2,\CC)$-fibrado holomorfo sobre la superficie algebraica $X$, definimos el \emph{lagrangiano de Donaldson}
+\begin{equation*}
+	M(H,K)=\int_X R_2 \wedge \omega.
+\end{equation*} 
+Conviene definir también el funcional análogo sobre una superficie de Riemann $C$,
+\begin{equation*}
+	M_C(H,K)=\int_C R_2.
+\end{equation*} 
+
+Si mantenemos fija la métrica $K$, estos funcionales pueden entenderse como lagrangianos para $H$. El hecho clave ahora es que los puntos críticos de estos lagrangianos son precisamente las conexiones ASD. Tenemos de hecho el siguiente resultado.
+
+\begin{prop} Sea $H(t)$ la solución al flujo de Yang--Mills en $\EE$ con $H(0)=K$. Si el funcional $M(H,K)$ está acotado inferiormente cuando $t\rightarrow \infty$, entonces existe una subsucesión de $H(t)$ tal que $\Lambda F_{H(t)} \rightarrow 0$ en $C^0$ cuando $t\rightarrow \infty$.
+\end{prop}
+
+La cota para $M$ se obtiene ahora del siguiente teorema \cite{MR}. 
+
+\begin{thm}[Mehta--Ramanathan] \label{MehtaRamanathan}
+	Si $\EE$ es un fibrado semiestable en $X$, entonces existe un enetro $m_0$ tal que, para todo entero $m\geq m_0$ y para una curva lisa  $C\subset X$ definida por los ceros de una sección genérica $s\in \OO(m)$, tenemos que $\EE|_C$ es semiestable.
+\end{thm}
+
+Se trata ahora de usar la igualdad
+ \begin{equation*}
+	 M(H,K)=\tfrac{1}{m} M_C(H,K) - \int_X f \tr(F_H^2 - F_K^2),
+\end{equation*} 
+donde $f=(1/2\pi m)\log |s|^2$. El segundo término de esta fórmula está claramente acotado inferiormente. Ahora, si $\EE|_C$ es estable, entonces por el teorema de Narasimhan--Seshadri existe una métrica HE en  $\EE|_C$, que da la cota inferior de $M_C(-,K)$. Si $\EE|_C$ no es estable, podemos escribirlo en una sucesión exacta  $0\rightarrow \LL \rightarrow \EE|_C \rightarrow \LL' \rightarrow 0$, con  $\LL$ y $\LL'$ fibrados de línea de grado $0$. Por las propiedades de $R_2$ tenemos que
+\begin{equation*}
+	M_C(H,K)=M_C(H|_\LL,K|_\LL) + M_C(H|_{\LL'},K|_{\LL'}) + 2 \lVert \beta_H \rVert^2+ 2 \lVert \beta_K \rVert^2,
+\end{equation*} 
+que está acotado superiormente.
+
+\begin{proof}[Demostración del teorema de Donaldson (\ref{Donaldson})]
+De todo lo anterior obtenemos que si $\EE$ es un $\SL(2,\CC)$-fibrado  holomorfo semiestable en $X$ existe una familia de conexiones $A(t)$, para $t=[0,\infty)$, en la $\GG^\CC$-órbita de  $\EE$ tal que  $\Lambda F_{A(t)}\rightarrow 0$ cuando $t\rightarrow \infty$.
+
+	Por argumentos de compacidad \cite[\S 4.4]{DK}, es posible encontrar un límite $A_\infty$ de la familia  $A(t)$, definida sobre $X\setminus Z$, donde $Z$ es un conjunto finito de puntos, y satisfaciendo $\Lambda F_{A_\infty}=0$. Además, $A_\infty$ puede extenderse para dar una conexión ASD en todo  $X$, pero definida sobre un $\SL(2,\CC)$-fibrado diferenciable $E'$, tal vez diferente de $E$. Definimos el $\SL(2,\CC)$-fibrado holomorfo  $\EE'=(E',\delbar_{A_\infty})$.
+
+	Finalmente, de forma análoga a como hicimos para curvas, podemos obtener una aplicación holomorfa no nula $f:\EE \rightarrow \EE'$.
+De aquí se deduce inmediatamente el teorema de Donaldson. En primer lugar, del teorema de Kobayashi--Lübke se deduce que $\EE'$ es poliestable, y por tanto semiestable. Ahora, si $\EE$ es poliestable, entonces $f$ debe ser un isomorfismo.
+\end{proof}
+
+\begin{rmk}
+	Esta demostración del teorema de Donaldson se basa en aplicar el teorema de Narasimhan--Seshadri (es decir, de asumir el teorema probado en dimensión inferior) y hacer uso del teorema de Mehta--Ramanathan. Este último teorema puede generalizarse a la situación más general de hipersuperficies de una variedad proyectiva, lo que permitió a Donaldson generalizar su teorema a variedades proyectivas de dimensión superior. La demostración de Uhlenbeck y Yau es válida más generalmente para cualquier variedad Kähler. A cambio de no usar el teorema de Mehta--Ramanathan, la demostración de Uhlenbeck--Yau \cite{UY} conlleva más complicaciones de carácter analítico. La demostración expuesta en el libro de Donaldson y Kronheimer \cite[Capítulo 6]{DK} no usa el teorema de Mehta--Ramanathan y es válida para el caso concreto de conexiones ASD y $\SL(2,\CC)$-fibrados holomorfos en cualquier superficie Kähler, no necesariamente algebraica.
+\end{rmk}
+
+\subsection{Fibrados semiestables y compactificación del espacio de móduli}
+En este apartado hacemos un breve comentario acerca de cómo podemos entender los fibrados semiestables a través del teorema de Donaldson. 
+
+Supongamos entonces que $\EE_t$ es una familia de fibrados holomorfos tales que $\EE_t$ es estable para $t\neq 0$ y $\EE_0$ no es estable. El teorema de Donaldson afirma que (fija una métrica hermítica), a cada $\EE_t$ le corresponde una conexión ASD $A_t$. La pregunta ahora es cómo podemos interpretar el límite $\lim_{t\rightarrow 0} A_t$.
+
+Supongamos más aún, que $\EE_0$ es semiestable, y que está desestabilizado por una sección $0\rightarrow \OO_X \overset{s}{\rightarrow} \EE_0$. Denotamos por $(s)_0 \in S^k X$ la $k$-tupla de los puntos donde $s$ se anula. Aquí, $k=c_2(\EE_0)$ es el número de ceros de $s$, contados con multiplicidad. Si denotamos por $\Theta$ la conexión trivial en el fibrado trivial de $X$ y $([\Theta],(s)_0)$ la correspondiente conexión ideal, tenemos.
+
+\begin{prop}
+	La familia $[A_t]$ converge débilmente a $([\Theta],(s)_0)$ con $t\rightarrow 0$.	
+\end{prop}
+
+\section{Móduli ASD local}
+En esta sección estudiamos algunas propiedades locales del espacio de móduli de conexiones ASD.
+\subsection{Deformación de fibrados holomorfos}
+Sea $Z$ una variedad compleja compacta y $\EE\rightarrow Z$ un fibrado holomorfo. Dado un espacio analítico complejo con punto base $(T,t)$, una deformación de $\EE$ parametrizada por $T$ es un haz localmente libre $\tilde{\EE}$ sobre $Z\times T$ con $\tilde{\EE}|_{Z\times \{t\}}=\EE$. Nótese que, dada una aplicación $(S,s)\rightarrow (T,t)$ de espacios analíticos punteados, una deformación $\tilde{\EE}$ parametrizada por $T$ induce, por pull-back, una deformación parametrizada por $S$. Decimos que una deformación es \emph{versal}, si toda otra deformación se puede obtener de ella por una aplicación, y decimos que es \emph{universal} si tal aplicación es única. Nótese que si existe una deformación universal parametrizada por $T$, entonces $T$ representa el functor que envía cada espacio analítico $S$ al conjunto de deformaciones parametrizadas por $S$.
+
+Vamos a construir una deformación versal de cualquier fibrado holomorfo $\EE$ usando la teoría que desarrollamos para estudiar deformaciones de conexiones. En primer lugar, fijamos el fibrado diferenciable $E$ e identificamos el espacio tangente a $\Aa$ con $\Omega^{0,1}_Z(\End E)$. Ahora, la derivada de la acción de $\GG^\CC$ en una conexión $A$ es
+\begin{equation*}
+	\delbar_A: \Omega^0_Z(\End E) \longrightarrow \Omega^{0,1}_Z(\End E).
+\end{equation*} 
+Similarmente, la derivada de la aplicación $A\mapsto F^{0,2}_A$, con núcleo $\Aa^{1,1}$, está dada por el operador $\delbar:\Omega^{0,1}\rightarrow \Omega^{0,2}$. Por tanto, si $\EE$ es una estructura holomorfa en $E$, el análogo en esta situación del complejo de deformación ASD es el complejo de Dolbeaut
+\begin{center}
+\begin{tikzcd}
+	\Omega^0_Z(\End E) \ar{r}{\delbar_\EE} & \Omega^{0,1}_Z(\End E) \ar{r}{\delbar_\EE} & \Omega^{0,2}_Z(\End E),
+\end{tikzcd}
+\end{center}
+cuyo $1$-grupo de cohomología es $H^1(Z,\End \EE)$. Por otra parte, $H^0(Z,\End \EE)$ es el álgebra de Lie del grupo de automorfismos de $\EE$. En particular, si $\EE$ es simple, entonces $H^0(Z,\End \EE) \cong \CC$. 
+
+Si nos restringimos a trabajar con $\SL(r,\CC)$-fibrados, podemos cambiar en todas partes $\End \EE$ por el fibrado $\End_0 \EE$ de endomorfismos con traza nula.
+
+El resultado principal es el siguiente:
+
+\begin{prop}[Kuranishi]
+\begin{enumerate}
+	\item Existe una aplicación holomorfa $\psi$ de un entorno de $0$ en $H^1(Z,\End \EE)$ a $H^2(Z,\End E)$, tal que ella y su derivada se anulan en 0, y una deformación versal de $\EE$ parametrizada por $Y=\psi^{-1}(0)$.	
+	\item El $2$-jet de $\psi$ en el origen está dado por 
+		\begin{align*}
+			H^1(\End \EE) \otimes H^1(\End \EE) & \longrightarrow H^2(\End_0 \EE) \\
+			\alpha \otimes \beta & \longmapsto [\alpha \wedge \beta].
+		\end{align*} 
+	\item Si $\EE$ es simple, entonces $Y$ es una deformación universal, y un entorno de $[\EE]$ en el cociente $\Aa^{1,1}/\GG^\CC$ es homeomorfo a $Y$. Más generalmente, si $\Aut \EE$ es un grupo reductivo, podemos tomar $\psi$ que sea $\Aut \EE$-equivariante, de modo que $\Aut \EE$ actúa en $Y$ y un entorno en el cociente está modelado por $Y/\Aut \EE$.
+\end{enumerate}	
+\end{prop}
+
+\subsection{Comparación de las teorías de deformación}
+Vamos ahora a comparar las teorías de deformación de conexiones ASD con la de fibrados holomorfos. Suponemos entonces que $A$ es una conexión ASD irreducible en $E$ un fibrado $\mathrm{SU}(2)$.
+
+Tenemos los siguientes isomorfismos algebraicos
+\begin{align*}
+	\Omega^{0,1}(\End_0 E) &= \Omega^1(\su_E) \\
+	\Omega^0(\End_0 E) \oplus \Omega^{0,2}(\End_0 E) &= \Omega^0(\su_E) \oplus \Omega^+(\su_E),
+\end{align*}
+mientras que las identidades de Kähler dan isomorfismos canónicos
+\begin{align*}
+	H^1(\End \EE) &= H^1(\End_0 \EE)=H^1_A, \ \ H^0(\End_0 E)=H^0_A \otimes \CC, \\
+	H^2_A &= H^2(\End_0 \EE) \oplus H^0_A \omega.
+\end{align*}
+
+Ahora, por el teorema de Donaldson, sabemos que $\EE_A$ es estable. Por tanto, $\EE_A$ es simple y el resultado de Kuranishi nos da una deformación universal $Y$.
+
+Tomemos ahora $\alpha\in \Omega^{0,1}(\End E)$ y consideremos las ecuaciones ASD para un elemento $g=1+u\in \GG^\CC$,
+\begin{equation*}
+	\Lambda F_{g(A+\alpha -\alpha^*)}=0, \ \ d_A^*(g(A+\alpha-\alpha^*)-A)=0. 
+\end{equation*} 
+La linealización está dada por $\Delta_A u =-\delbar^*_A \alpha$.
+
+Como $\Delta_A$ da endomorfismos de traza nula, el teorema de la función implícita da una solución $g_\alpha$ para un $\alpha$ pequeño. Consideremos ahora el fibrado $\Xi$ sobre un entorno del origen de $\ker d_A^*$ con fibra
+\begin{equation*}
+	\Xi_{\alpha-\alpha^*}=g_\alpha H^2(\End_0 \EE) g_{\alpha}^{-1} \subset \Omega^{0,2}(\End_0 E). 
+\end{equation*} 
+Por el procedimiento que vimos cuando estudiamos las deformaciones de las conexiones ASD, podemos construir un modelo del espacio de móduli de las conexiones ASD usando este fibrado sobre $\ker d_A^*$, en la forma de una aplicación $f:H^1_A\rightarrow H^2_A$. Por otra parte obtenemos un modelo $\psi:H^1_A \rightarrow H^2_A$ para la deformación universal de la componente  de $F_A^{0,2}$ correspondiente a $H^{2}(\End_0 \EE)$ en el espacio $\ker \delbar^*_A \cap \ker \delbar_A = \ker d_A^* \cap \ker d_A^+$. Es fácil convencerse de que  $f=\psi$. Se sigue que la estructura local del espacio de móduli de conexiones ASD es compatible con la de las deformaciones universales. En resumen, tenemos:
+
+\begin{prop}
+	Si $X$ es una superficie Kähler compleja y $E\rightarrow X$ es un fibrado $\mathrm{SU}(2)$, el espacio de móduli $M_E^*$ de conexiones ASD irreducibles es un espacio analítico complejo y cada punto de $M_E^*$ tiene un entorno que es la base de la deformación universal de correspondiente fibrado vectorial estable.
+	
+\end{prop}
+
+\subsection{Orientación del móduli}
+Una consecuencia sencilla de la comparación de las teorías de deformación tiene que ver con la orientación del móduli. Vimos que el móduli podía orientarse a partir de una orientación del fibrado $\Lambda \rightarrow \mathcal{B}$, cuyas fibras están dadas por
+\begin{equation*}
+	\Lambda_A = \wedge^{\mathrm{max}}\ker \delta_A \otimes (\wedge^{\mathrm{max}}\ker \delta_A^*)*.
+\end{equation*} 
+
+Ahora, si $X$ es una superficie Kähler y $A$ una conexión unitaria, por las identidades de Kähler podemos identificar $\delta_A:\Omega^1_X(\su_E)\rightarrow \Omega^0_X(\su_E)\oplus \Omega^+_X(\su_E)$ con $\delbar_A^*\oplus \delbar_A: \Omega^{0,1}_X(\End_0 E)\rightarrow \Omega^0_X(\End_0 E)\oplus \Omega^{0,2}_X(\End_0 E)$. El núcleo y el conúcleo de este operador son espacios vectoriales complejos, y por tanto tienen orientaciones canónicas.
+
+	\section{La topología diferencial de las superficies algebraicas}
+	Aplicaremos ahora la correspondencia entre conexiones ASD y fibrados estables, junto con los invariantes de Donaldson, para obtener algunos resultados concernientes a la topología diferencial de una superficie algebraica lisa y simplemente conexa.
+
+	\subsection{El resultado}
+	Sea $S$ una superficie algebraica compleja lisa y simplemente conexa. Esta $S$ tiene una orientación estándar y, por ser simplemente conexa, se tiene $b^+(S)=1+2p_g(S)$, donde $p_g(S)=h^{2,0}$ es el \emph{género geométrico de $S$}. Recordemos que para tener los invariantes de Donaldson bien definidos exigíamos $b^+\geq 3$. Por tanto, pedimos $p_g(S)>0$. Además, la estructura compleja induce una orientación natural en el espacio de móduli de forma que no hay ambigüedad en el signo.
+
+	Por otra parte, recordamos el resultado de Zariski que afirma que toda superficie algebraica $S$ puede embeberse holomórficamente en un espacio proyectivo. Podemos considerar entonces un fibrado relativamente amplio $\OO(1)$ en $S$. Una curva compleja $C\subset S$ en el sistema lineal $|\OO(1)|$ define de forma natural una clase de homología $h \in H_2(S)$, dependiendo sólo del embedding de $S$ en el proyectivo. Equivalentemente, $h$ es la restricción del generador de $H_2(\CC\mathbb{P}^n)$.
+
+	Recordemos la construcción de los invariantes de Donaldson. Tomamos un número $k$,  $E\rightarrow X$ un fibrado $\mathrm{SU}(2)$ con $c_2(E)=k$, y $M_k$ el espacio de móduli de conexiones ASD en $E$. La dimensión de $M_k$ está dada por $2d$, donde $d=4k-\tfrac{3}{2}(b^+(X)+1)$. En este caso, tenemos
+	\begin{equation*}
+		d=4k- 3p_g(S) -3.
+	\end{equation*} 
+	Consideramos ahora $[\Sigma_1],\dots,[\Sigma_d]\in H_2(X)$ clases de homología representadas por superficies (reales) $\Sigma_1,\cdots \Sigma_d$. Vimos que, asociada a cada $\Sigma_i$ podemos construir un fibrado de línea $\LL_i \rightarrow \BB^*_{\Sigma_i}$ con $c_1(\LL_{\Sigma_i})=\mu([\Sigma_i])$. Recordemos que este fibrado se construía en términos del operador de Dirac, pero, identificando el operador de Dirac con el operador de Dolbeaut, podíamos dar la fibra de $\LL_i$ sobre una conexión $A$ como
+	\begin{equation*}
+		\det (\ker \delbar_A)^* \otimes \det (\ker \delbar_A^\dagger) = \det H^0(X,E_A)^* \otimes \det H^1(X,E_A).
+	\end{equation*} 
+	Tomando una sección genérica $s_i$ de cada $L_i$ y denotando por $V_i$ su conjunto de ceros definimos el \emph{invariante de Donaldson}  
+	\begin{equation*}
+		q_k([\Sigma_1],\dots [\Sigma_d]) = \# (M_k \cap V_1 \cap \cdots \cap V_d).
+	\end{equation*} 
+
+	El resultado principal es el siguiente:
+	\begin{thm}
+		Para toda superficie algebraica lisa y simplemente conexa $S$ con $p_g(S)>0$, y para toda clase $h\in H_2(S)$ existe un $k_0=k_0(S,h)$ tal que, para cada $k\geq k_0$, tenemos
+		\begin{equation*}
+			q_{k}(h)=q_k(h,...,h)>0.
+		\end{equation*} 
+	\end{thm}
+
+	La consecuencia más importante de este resultado es la siguiente
+	\begin{corol}
+		Ninguna superficie algebraica simplemente conexa $S$ puede escribirse como una suma conexa $X_1 \# X_2$	con $b^+(X_1)$ y $b^+(X_2)$ ambos positivos. En particular, si $b^+(S)\geq 5$, existe una $4$-variedad diferenciable $X(S)$ homotópicamente equivalente a $S$ pero no difeomorfa a ella, ni a ninguna otra superficie compleja.	
+	\end{corol}
+
+	La primera parte del corolario es consecuencia de una serie de teoremas de anulación para los polinomios de Donaldson (ver sección 9.3 del Donaldson--Kronheimer). Podemos ilustrar la segunda parte con el siguiente ejemplo.
+
+	\begin{ej}
+		Un resultado clásico de Milnor (1958) afirma que el tipo de homotopía de una $4$-variedad compacta, orientada y simplemente conexa está determinado por su \emph{forma de intersección}, la forma bilineal $Q:H_2(X)\times H_2(X)\rightarrow \mathbb{Z}$ dada por la dualidad de Poincaré. El plano proyectivo $\CC\PP^2$ tiene la forma de intersección dada por la matriz $(1)$, mientras que la variedad con orientación opuesta $\overline{\CC\PP}^2$ tiene la forma $(-1)$. Además, la forma de intersección de una suma conexa es la suma directa de las formas de intersección. Resulta que toda forma unimodular impar indefinida es equivalente a $l(1)\oplus m(-1)$, para ciertos números $l$ y $m$. Por tanto, si $S$ es una superficia algebraica simplemente conexa cuya forma de intersección es una forma unimodular impar indefinida, concluimos que $S$ es homotópicamente equivalente a una suma conexa de varios $\CC\PP^2$ y  $\overline{\CC\PP}^2$, pero, por la primera parte del corolario, $S$ no es difeomorfa a a esta suma conexa.
+	\end{ej}
+
+	\subsection{La idea general}
+	La idea general consiste en construir una inmersión del espacio de móduli en un espacio proyectivo $j:M\rightarrow \CC\PP^r$, dada por secciones del fibrado de línea $\LL^n$, donde $\LL$ es el determinante de la restricción de las conexiones a una curva $C$ representando $h$. En condiciones idóneas, el embedding podría obtenerse mediante el teorema de Kodaira, ya que puede probarse que $\LL$ es un fibrado positivo, pero en general tendremos dificultades técnicas con singularidades y no compacidad en el móduli. Si estuviéramos en esa situación ideal, y tuviéramos ese embedding, la imagen $j(M)$ sería una subvariedad algebraica de $\CC\PP^r$ y $\LL^n$ sería isomorfo al fibrado $\OO(1)$ restringido a $j(M)$. En esta situación, $q(h)$ está dado por $1/n^d$ por el número de puntos en la intersección de $j(M)$ con $d$ hiperplanos generales de $\CC\PP^r$. Pero este número es precisamente el \emph{grado} ``algebraico" de $j(M)$, que sabemos que es positivo si $j(M)$ es no vacío.
+
+\subsection{El móduli de fibrados en curvas}
+Sea $X$ una superficie de Riemann de género $g$ y tomemos $L\rightarrow X$ un fibrado holomorfo de grado $1$ en $X$. Denotemos por $W(d)$ el espacio de móduli fibrados vectoriales holomorfos estables de rango $2$ y determinante $L^d$. Claramente, tenemos una biyección 
+\begin{align*}
+	W(d) & \longrightarrow W(d+2k) \\
+[E] & \longmapsto [E\otimes L^k].
+\end{align*} 
+Por tanto, basta considerar los espacis $W(d)$, con $d$ par por una parte, y con $d$ impar por otra. Cualquiera de la primera clase lo denotaremos por $W_0$ y cualquiera de la segunda por $W_1$. En esta sección, vamos a obtener inmersiones de los espacios de móduli $W_0$ y $W_1$ en un cierto espacio proyectivo. Nótese además que cuando $d$ es impar, todos los fibrados estables de rango $2$ y grado $d$ son necesariamente estables. De aquí se deduce que el espacio de móduli dado por $W_1$ ha de ser compacto. 
+
+\begin{lema}
+	Supongamos que $d>4g-2$. Si $E\rightarrow X$ es un fibrado semiestable de rango $2$ y grado $d$ entonces
+	\begin{enumerate}
+		\item $E$ es globalmente generado; esto es, para cada $x\in X$ la aplicación
+			\begin{align*}
+				e_x:H^0(X,E) & \longrightarrow E_x \\
+				s & \longmapsto s(x),
+			\end{align*} 
+			es sobreyectiva.
+		\item $H^1(X,E)=0$.
+	\end{enumerate}
+\end{lema}
+\begin{proof}
+	Veamos primero 2. Por dualidad de Serre, $H^1(X,E)\neq 0$ equivale a decir que $\Hom(E,K)\neq 0$, para $K$ el fibrado canónico de $X$. Ahora, como $E$ es semiestable, esto implica que $\deg K\geq d/2$, pero $\deg K=2g-2$ y, por hipótesis, $d/2>2g-1$, con lo que tenemos una contradicción.
+
+	Veamos ahora $1$. Consideremos la sucesión exacta
+	\begin{center}
+	\begin{tikzcd}
+		0 \rar & E(-x) \rar & E \rar & E_x \rar & 0,
+	\end{tikzcd}
+	\end{center}
+	que induce una sucesión exacta en cohomología
+	\begin{center}
+	\begin{tikzcd}
+		H^0(X,E) \rar{e_x} & E_x \rar & H^1(X,E(-x)).
+	\end{tikzcd}
+	\end{center}
+	Basta entonces ver que $H^1(X,E(-x))=0$, pero esto es claro porque $\deg E(-x) =\deg E + 2\deg \OO(-x)=\deg E -2 > 4g-4$, con lo que $\deg E(-x)/2 > 2g-2=\deg K$, de modo que $\Hom(E,K)=0$.
+\end{proof}
+
+Sea $k>2g-1$. Podemos entonces representar $W_0$ y $W_1$ por los espacios de móduli $W(2k)$ y $W(2k+1)$, respectivamente, de modo que podemos asumir que cualquier fibrado $E$ en cualquiera de estos dos espacios de móduli es globalmente generado y $H^1(X,E)=0$. Más aún, por el teorema de Riemann-Roch, tenemos que $\dim H^0(X,E)=\deg E+2(1-g)$. Denotaremos este número por $p= \deg E+2(1-g)$. 
+
+Tomemos entonces $E$ en $W_0$ o en $W_1$. Como es globalmente generado, tenemos que, para cada $x\in X$, la aplicación
+\begin{align*}
+e_x:	H^0(X,E) & \longrightarrow E_x 
+\end{align*} 
+es sobreyectiva. Llamando $V=H^0(X,E)$, esto implica que tenemos una aplicación sobreyectiva de fibrados $V\otimes \OO_X \rightarrow E$. Por tanto, podemos describir $E$ mediante una familia de cocientes de dimensión $2$ del espacio vectorial $V$ o, equivalentemente, por una familia de subespacios de dimensión $2$ de su dual $V^*$. Tenemos entonces una aplicación canónica a la grassmanniana
+\begin{equation*}
+	f:X \longrightarrow \Gr_2(V^*),
+\end{equation*} 
+con $f(x)$ el anulador de $\ker e_x$. El fibrado $E$ puede recuperarse del fibrado universal $U\rightarrow \Gr_2(V^*)$ como el pullback $f^*U$.
+
+Podemos dar una inmersión de la grassmanniana en un espacio proyectivo mediante las coordenadas de Plücker
+\begin{align*}
+	i: \Gr_2(V^*) & \longrightarrow \PP(\wedge^2 V^*) \\
+	\mathrm{Span}(\epsilon_1,\epsilon_2) & \longmapsto [\epsilon_1\wedge \epsilon_2].
+\end{align*} 
+Obtenemos entonces una aplicación $g:X\rightarrow \PP(\wedge^2 V^*)$ dada por $g=i\circ f$. Además, tenemos que $g^* \OO(1)$ es canónicamente isomorfo al determinante $\wedge^2 E$.
+
+Por tanto, $g$ se obtiene de una composición de la aplicación natural $u:X\rightarrow \PP(H^0(X,\wedge^2 \EE)^*)$ con la proyectivización de una aplicación lineal $H^0(\wedge^2 \EE)^*\rightarrow \wedge^2 V^*$. Es fácil ver que esta aplicación lineal es de hecho la traspuesta de la aplicación natural $\sigma_E:\wedge^2 H^0(X,E)\rightarrow H^0(X,\wedge^2 E)$.
+Concluimos entonces que $E$ está completamente determinado por la aplicación $\sigma$.
+
+Concluimos de esto que las clases de isomorfismo de fibrados de rango $2$ y determinante $L^{2k}$  (respectivamente, $L^{2k+1}$) están en biyección con las $\SL(p,\CC)$-órbitas en $\PP(\Hom(\Lambda^2 \CC^p,\CC^q))$, donde, como antes $k>2g-1$, $p=\dim H^0(X,E)=2(k+1-g)$ (respectivamente $p=2k+3-2g$) y $q=\dim H^0(X,L^{2k})$ (respectivamente, $q=\dim H^0(X,L^{2k+1})$). El cociente GIT de esta acción se obtiene como el conjunto de órbitas estables. 
+
+\begin{prop}
+La órbita de la aplicación $\sigma_E$ es estable si $E$ es estable.	
+\end{prop}
+
+Este hecho puede demostrarse usando el criterio de Hilbert--Mumford. Concluimos que existe una inmersión proyectiva $j:W\rightarrow \CC\PP^r$ para algún $r$, con $W=W_0$ o a $W_1$.
+
+Debemos probar ahora que la inmersión $j$ está dada por una potencia del fibrado de línea $\LL\rightarrow \BB^*_X$. Por simplicidad consideramos el caso con $W=W_0$. En primer lugar, nótese que el espacio de móduli de los fibrados $V$ con determinante trivial puede identificarse con el móduli de pares  $(V,\psi)$, con $\psi:\wedge^2 V\rightarrow \OO_X$ un isomorfismo, ya que los escalares actúan en estas aplicaciones de forma transitiva. Por tanto, para clasificar los fibrados con determinante trivial podemos fijar la trivialización del determinante. 
+
+Ahora, dado $M\rightarrow X$ un fibrado de línea, podemos definir un fibrado de línea sobre este espacio de móduli cuya fibra sobre el punto $(V,\psi)$ es $\det H^0(X,V\otimes M) \otimes \det H^1(X,V\otimes M)$. Si $V$ es estable, los únicos automorfismos de $(V,\psi)$ son $\pm 1$, que actúan trivialmente en la fibra porque la característica de Euler de $V$ es par. Obtenemos entonces un fibrado $\LL_M$ sobre el espacio de fibrados $V$ con una trivialización de $\Lambda^2 V$. 
+
+Podemos ver ahora que todos estos $\LL_M$ son isomorfos. Para ver esto supongamos que $M=\OO(x)$ para algún punto $x\in X$ y el caso general se obtiene por inducción. Tenemos una sucesión exacta
+\begin{center}
+\begin{tikzcd}
+	0 \rar &V \rar & V(x) \rar & V(x)_x \rar &0,
+\end{tikzcd}
+\end{center}
+que en cohomología da un isomorfismo natural entre  el producto de los determinantes en $V(x)$ y  el producto tensorial del de $V$ con $\wedge^2 V(x)_x$. Fijando una base de $M_x$, la trivialización de $\wedge^2 V$ da un isomorfismo entre $\LL_M$ y  $\LL_\OO$.
+
+Sea ahora $E=V\otimes L^k$, de modo que podemos suponer dado un isomorfismo entre $\wedge^2 E$ y $L^{2k}$. Podemos considerar el espacio de móduli de ternas $(V,\psi,f)$, con $\psi$ una trivialización de $\wedge^2 V$ y $f:H^0(E)\rightarrow \CC^p$. Una terna así da un punto $\sigma_{V,\psi,f}$ de $\Hom(\wedge^2 \CC^p,\CC^q)$ cuya órbita es $j([E])$. La acción de $\zeta \in\CC^*$ en la forma $f \mapsto \zeta f$ induce una acción  $\sigma_{V,\psi,f}\mapsto \zeta^{-1}\sigma_{V,\psi,f}$. El centro $\mathbb{Z}/p$ de $\SL(p,\CC)$ actúa trivialmente en el espacio proyectivo, de modo que $\OO(1)$ no tiene por qué descender al cociente, pero sí lo hará su potencia $\OO(p)$. Concluimos entonces que $j^*\OO(p)$ es isomorfo a $\LL$.
+
+En resumen, hemos obtenido una inmersión $j$ de $W_0$ en el espacio proyectivo mediante secciones holomorfas de una potencia del fibrado de línea $\LL$.
+
+
+
+\subsection{La inmersión en el proyectivo}
+La clave para construir la inmersión de $M_k$ en el proyectivo está en emplear el teorema de Mehta--Ramanathan (Teorema \ref{MehtaRamanathan}). Si, dada una curva lisa $C\subset S$ consideramos $U_C\subset M_k$ el abierto Zariski formado por los fibrados cuya restricción a $C$ es estable, el teorema dice que 
+\begin{equation*}
+	M_k= \bigcup_{m} \bigcup_{C \in |\OO(m)|} U_C.
+\end{equation*} 
+Ahora, $M_k$ es de tipo finito, de modo que es compacto en la topología de Zariski, luego podemos tomar un subrecubrimiento finito
+\begin{equation*}
+M_k=\bigcup_{i=1}^R U_i,
+\end{equation*} 
+con $U_i=U_{C_i}$. Además, podemos suponer que las $C_i$ están todas en el mismo sistema lineal $\OO(m)$ y en posición general. También podemos suponer que para cualquier par $[\EE]$ y $[\EE']$ en  $M_k$ la cohomología $H^1(\Hom(\EE,\EE')(-m))=0$. Además, reemplazando la inclusión por la definida por $|\OO(m)|$ podemos suponer $m=1$ y que las curvas $C_i$ son secciones de hiperplanos.
+
+Supongamos en primer lugar que $S$ es spin, de modo que existe una raíz cuadrada $K_S^{1/2}$. Sea $C$ una curva en el sistema lineal $|\OO(2d)|$. Existe una raíz cuadrada de $K_C$ inducida y una sucesión exacta corta
+\begin{center}
+\begin{tikzcd}
+	0 \rar & \OO(-d)\otimes K_S^{1/2} \rar & \OO(d)\otimes K_S^{1/2} \rar & K_C^{1/2} \rar & 0.
+\end{tikzcd}
+\end{center}
+Para cualquier fibrado $\EE$ sobre $S$ tenemos un isomorfismo
+\begin{equation*}
+	\det H^*(\EE \otimes K_S^{1/2} \otimes \OO(d)) 	\det H^*(\EE \otimes K_S^{1/2} \otimes \OO(-d))^{-1} = \det H^*(\EE|_C\otimes K_X^{1/2}).
+\end{equation*} 
+La expresión de la derecha es la fibra de $\LL_C$, mientras que la expresión de la izquierda es independiente de $C$. Deducimos entonces que la restricción a diferentes curvas da fibrados de línea isomorfos sobre el espacio de móduli ASD. Es fácil generalizar este resultado al caso en que $S$ no sea spin y la clase de $C$ no sea par, de forma análoga a los argumentos de la sección anterior.
+
+En resumen, para cada $i$ tenemos un espacio de móduli liso $W_i=W(C_i)$, un fibrado determinante $\LL_i$ sobre $W_i$ y una inmersión proyectiva $J_i:W_i \rightarrow \PP_i=\PP(G_i^*)$ asociado con un espacio vectorial $G_i$ de secciones de $\LL^p_i$.
+
+Ahora, la aplicación de restricción  $r_i:U_i\rightarrow W_i$ es regular, de modo que tenemos aplicaciones $J_i\circ r_i: U_i \rightarrow \PP_i$. En $M_k$ tenemos el fibrado de línea fijo $\LL$ y un isomorfismo de $\LL$ con $\LL_i$, de modo que podemos ver los $G_i$ como espacios de secciones de $\LL^p|_{U_i}$, y estos se extienden holomórficamente a todo $M_k$. En conclusión, tnemos un espacio $G=\bigoplus_i G_i$ de secciones de $\$LL^p$ sobre $M_k$ y, para cada punto $[\EE]$ en $M_k$ existe una sección en $G$ que no se anula en $\EE$. Pero esto equivale a decir que tenemos una aplicación inducida
+\begin{equation*}
+	J: M_k \rightarrow \PP(G^*)
+\end{equation*} 
+con $J^*(\OO(l))=\LL^p$ y tal que las aplicaciones $J_i\circ r_i$ son las composiciones de $J$ con las proyecciones a los factores individuales. Son funciones racionales en $M_k$ y regulares en $U_i$.
+
+Para ver que $J$ es un embedding usamos que $H^1(\Hom(\EE,\EE')(-1))=0$. Esto implica que si dos fibrados $\EE$ y $\EE'$ son isomorfos al restringirlos a una $C_i$, entonces son isomorfos en $S$. Por tanto, $J$ es inyectiva porque lo son los $J_i$. De forma similar, tomando $\EE=\EE'$, vemos que $J$ es una inmersión. 
+
+Una observación final es que podemos organizar el conjunto de superficies de forma que tengan las propiedades deseadas para todos los espacios $M_j$ con $j\leq k$.
+
+\subsection{El argumento fino}
+
+\begin{lema}
+Sea $J:M_k \rightarrow \PP(G)$ la inmersión proyectiva definida por secciones de $\LL^p$ construida antes. Entonces:
+	\begin{enumerate}
+		\item  El grado de la imagen $J(M_k)$ es independiente de la elección de las curvas $C_i$.
+		\item Para $k$ suficientemente grande, 
+			\begin{equation*}
+				q_k([C_i])=\frac{1}{N^d} \deg(J(M_k)).
+			\end{equation*} 
+	\end{enumerate}
+\end{lema}
+
+\begin{proof}
+	Para probar 1 basta mostrar que si extendemos una colección de curvas $C_1,\dots, C_L$ por otra $C_{L+1}$, entonces el grado de las inmersiones proyectivas no cambia. Pero esto se sigue inmediatamente del hecho de que si una proyección $\PP^{n+s} \rightarrow \PP^n$ se restringe a una subvariedad $Q\subset \PP^{n+s}$ para dar una inmersión $\pi:Q\rightarrow \PP^n$, entonces los grados de $Q$ y de $\pi(Q)$ coinciden.	
+
+	Probemos ahora 2. En primer lugar, definimos
+\begin{equation*}
+\Sigma = \left\{[A]\in M_k : H^2_A \neq 0\right\}.
+\end{equation*} 
+	Supongamos por inducción que hemos escogido curvas  $C_i$, con $i=1,\cdots,l$, en posición general y secciones  $g_i$ en $G_i$ cuyo conjunto de ceros es
+	\begin{equation*}
+		Z_l^{(k)}= Z(g_1,\cdots,g_l)=\left\{[\EE]\in M_k | g_i(\EE)=0, i=1,\cdots l\right\}
+	\end{equation*} 
+	y tiene las siguientes propiedades
+	\begin{enumerate}
+		\item $Z_l^{(k)}$ tiene la dimensión correcta $d-l$,
+		\item $Z_l^{(k)} \cap \Sigma$ tiene la dimensión correcta $\dim \Sigma -l$.
+		\item En un abierto denso de $(M_k\setminus \Sigma)\cap Z_l^{(k)}$ los ceros de $g_i$ son transversos.
+		\item Para todos los espacios de móduli $M_i$ con $i\leq k$, los conjuntos
+			\begin{equation*}
+				Z_l^{(i)}=\left\{[\EE]\in M_k | g_j(\EE)=0, j=1,\cdots l\right\}
+			\end{equation*} 
+			tienen dimensión $\dim M_i -l$.
+	\end{enumerate}
+
+	Para pasar de $l$ a $l+1$ notamos que, como variedades cuasiproyectiva, todos los $Z_l^{(i)}$ y $Z_l^{(k)}\cap \Sigma$ tienen una cantidad finita de componentes. Tomemos un punto en cada componente, es decir, un conjunto finito de fibrados $\EE_{\lambda}$. Entonces, por el teorema de Mehta--Ramanathan, podemos tomar una curva $C_{l+1}$ tal que todos los $\EE_{\lambda}$ son estables en $C_{l+1}$. Por tanto la sección genérica de hiperplanos de $\PP_{l+1}$ induce una sección $g_{l+1}$ que no se anula en ningún $\EE_{\lambda}$; entonces los conjuntos $Z_{l+1}^{(i)}$ no contienen ninguna componente de los $Z_l^{(i)}$, y se sigue que tienen la dimensión adecuada. Por tanto, por inducción podemos tomar un conjunto de curvas $C_1,\dots,C_d$ y secciones  $g_1,\cdots, g_d$ tales que el conjunto de ceros común en $M_k$ es un conjunto finito de puntos $\{E_\mu\}$, ninguno contenido en $\Sigma$ y con las propiedades de posición general 1-4.
+
+	Ahora, por una parte podemos extender esta colección de curvas, si es necesario, para obtener una inmersión proyectiva de $M_k$. Las $g_i$ representan secciones de hiperplanos de $J(M_k)$ y el número de puntos en la intersección, contados con multiplicidad, representa el grado de $J(M_k)$ si no hay ``ceros en el infinito"; esto es, si no hay ceros comunes de todos los $g_i$ en $\overline{J(M_k)}\setminus J(M_k)$. Por otra parte, cada $g_i$ representa una sección del fibrado $\LL_i$ y sus ceros dan una variedad de codimensión $2$ $V_{i}$. La intersección $M_k \cap V_1 \cap \cdots \cap V_d$ es por construcción un conjunto finito de puntos $\{A_\mu\}$.
+
+	Finalmente, para probar la igualdad de $q_k(h)$ con $\deg(J(M_k))$ tenemos que probar tres cosas:
+	\begin{enumerate}
+		\item Que las multiplicidades con las que contamos los puntos, ya sean como intersecciones en el espacio proyectivo o en el espacio de conexiones, coinciden. Esto es cierto porque la multiplicidad local coincide con la multiplicidad de cualquier deformación transversa.
+		\item Que si perturbamos la métrica y $V_{C_i}$ todos los nuevos puntos de intersección son cercanos a los $A_\mu$.
+		\item Que en espacio proyectivo  $\PP$ no hay ceros comunes de los $g_i$ en $\overline{J(M_k)}\setminus J(M_k)$.
+	\end{enumerate}
+
+	Empezemos por ver 3. Supongamos que por contra existe un cero en $\overline{J(M_k)}\setminus J(M_k)$. Entonces podemos hallar una sucesión de fibrados holomorfos $\EE_\alpha$ en $S$ sin subsucesiones convergentes pero con todos los $g_i(\EE_\alpha)$ tendiendo a $0$ cuando $\alpha$ tiende a $\infty$. Tomando las conexiones ASD $A_\alpha$ correspondientes, podemos aplicar el teorema de compacidadd y, sin pérdida de generalidad, suponer que $A_\alpha$ tiende a una conexión límite $A_\infty$ en el complemento de un conjunto finito de puntos $\{x_\nu\}$. La conexión límite tiene clase de Chern  $l<k$ y hay como mucho  $k-l$ puntos en $\{x_\nu\}$. Ahora, para cualquier curva $C_i$ que no contenga a ninguno de los puntos de $\{x_\nu\}$ la restricción de las conexiones converge en $C^\infty$; se sigue que para cualquiera tal  $i$, $g_i(A_\infty)=0$. Pero hemos visto que los ceros múltiples de las $g_i$ en los espacios de móduli con clase de Chern menor son de la dimensión adecuada, de modo que si $d_l$ es la dimensión compleja de $M_l$ debemos tener
+	\begin{equation*}
+		d_l + 2(k-l) \geq d=4k-3(1+p_g).
+	\end{equation*} 
+
+	Ahora, tenemos el siguiente lema
+	\begin{lema}
+	Existen constantes $B_1$ y $B_2$ tales que para todo $k$,
+	\begin{equation*}
+	\dim \Sigma \leq 3k + B_1 k^{1/2} + B_2.
+	\end{equation*} 
+	\end{lema}
+	Por tanto, la dimensión de $\Sigma$ crece más lentamente que la dimensión virtual de $M_k$. Por tanto, para $k$ grande (digamos, mayor o igual que un $k_0$) el espacio de móduli tiene la dimensión correcta. Definimos entonces 
+	\begin{equation*}
+	D=\max_{j \leq k_0} \dim_{\CC} M_j.
+	\end{equation*} 
+	Por tanto, si $2k> D+3(1+p_g)$, la desigualdad anterior no puede darse, de modo que se cumple 3. Finalmente, el mismo argumento muestra que para una sucesión de métricas $g^{\alpha}\rightarrow g$ y de secciones $g_i^{\alpha}\rightarrow g_i$, los ceros comunes en el móduli $M_k(g^{(\alpha)})$ convergen a las $A_\mu$, verificando la propiedad $2$.
+\end{proof}
+
+\nocite{*}
+\bibliographystyle{alpha}
+\bibliography{biblio}
+
+\end{document}
